@@ -1,8 +1,4 @@
-from tkinter import filedialog, simpledialog, Tk
-
 from utils import hide_username_in_path
-
-import shutil
 import sorter
 import os
 
@@ -24,98 +20,6 @@ def show_main_help(current_mode):
     print("\033[33m5. Change Mode\033[0m - Changes the save types between Normal or Hardcore saves.")
     print("\033[33m6. This very help menu\033[0m - Displays explanations and guidance on what each menu option does.")
     print("\033[31m7. Quit\033[0m - Closes this program. Use this when you're done managing your game saves.\n")
-
-def select_mode():
-    global save_mode
-    while True:
-        print("\n\033[35mSelect Game Mode:\033[0m")
-        print("\033[32m1. Normal Mode\033[0m")
-        print("\033[31m2. Hardcore Mode\033[0m")
-        print("\033[96m3. Sync and convert saves from modes\033[0m")
-        print("\033[33m4. Help\033[0m")
-
-        mode_choice = input("Enter your choice: ")
-        os.system("cls")
-        if mode_choice == "1":
-            save_mode = "save_0"
-            break
-        elif mode_choice == "2":
-            save_mode = "save_1"
-            break
-        elif mode_choice == "3":
-            sorter.main()
-        elif mode_choice == "4":
-            show_mode_help()
-        else:
-            print("Please enter a valid number choice")
-
-    current_mode = "Normal" if mode_choice == "1" else "Hardcore"
-    print(f"\033[33mMode set to {current_mode}.\033[0m\n\n")
-    return current_mode
-
-def choose_save_directory(base_url):
-    if base_url is None:
-        return None
-
-    global save_mode
-    root = Tk()
-    root.withdraw()
-    if save_mode == "save_0":
-        initialdir = os.path.join(base_url,"Normal")
-    elif save_mode == "save_1":
-        initialdir = os.path.join(base_url, "Hardcore")
-    folder_selected = filedialog.askdirectory(initialdir=initialdir)
-
-    if folder_selected:
-        save_files = [f for f in os.listdir(folder_selected) if save_mode in f]
-        for file in save_files:
-            src_path = os.path.join(folder_selected, file)
-            dest_path = os.path.join(base_url, file)
-            shutil.copy(src_path, dest_path)
-            hidden_base = hide_username_in_path(base_url)
-            hidden_target = hide_username_in_path(folder_selected)
-            print(f"Copying '{file}' from '{hidden_target}' to '{hidden_base}'")
-        print(f"Files containing '{save_mode}' have been copied to {hidden_base}")
-        return folder_selected
-    else:
-        print("No directory was selected")
-        return None
-
-def create_and_copy_to_new_folder(base_url):
-    if base_url is None:
-        return
-
-    global save_mode
-    root = Tk()
-    root.withdraw()
-    if save_mode == "save_0":
-        initialdir = os.path.join(base_url,"Normal")
-    elif save_mode == "save_1":
-        initialdir = os.path.join(base_url, "Hardcore")
-    target_directory = filedialog.askdirectory(initialdir=initialdir, title="Select target directory for new folder")
-    if not target_directory:
-        print("No directory was selected")
-        return
-
-    new_folder_name = simpledialog.askstring("New Folder Name", "Enter the name of the new folder:", parent=root)
-    if not new_folder_name:
-        print("No folder name was provided")
-        return
-
-    new_folder_path = os.path.join(target_directory, new_folder_name)
-    os.makedirs(new_folder_path, exist_ok=True)
-    hidden_target = hide_username_in_path(new_folder_path)
-    print(f"New folder created at: {hidden_target}")
-
-    extensions = ['.sav', '.onl', '.vdf']
-    files_to_copy = [f for f in os.listdir(base_url) if os.path.splitext(f)[1] in extensions and save_mode in f or "profile" in f.lower()]
-    for file in files_to_copy:
-        src_path = os.path.join(base_url, file)
-        dest_path = os.path.join(new_folder_path, file)
-        shutil.copy(src_path, dest_path)
-        hidden_base = hide_username_in_path(base_url)
-        hidden_target = hide_username_in_path(new_folder_path)
-        print(f"Copied '{file}' from '{hidden_base}' to '{hidden_target}'")
 
 def introduction():
     os.system("cls")
