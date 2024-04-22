@@ -21,38 +21,16 @@ def find_game_directory_base_url():
         print("No subdirectories found under base directory.")
         return None
 
-def create_and_copy_to_new_folder(base_url):
-    if base_url is None:
-        return
-
-    global save_mode
-    root = Tk()
-    root.withdraw()
-    if save_mode == "save_0":
-        initialdir = os.path.join(base_url,"Normal")
-    elif save_mode == "save_1":
-        initialdir = os.path.join(base_url, "Hardcore")
-    target_directory = filedialog.askdirectory(initialdir=initialdir, title="Select target directory for new folder")
-    if not target_directory:
-        print("No directory was selected")
-        return
-
-    new_folder_name = simpledialog.askstring("New Folder Name", "Enter the name of the new folder:", parent=root)
-    if not new_folder_name:
-        print("No folder name was provided")
-        return
-
-    new_folder_path = os.path.join(target_directory, new_folder_name)
-    os.makedirs(new_folder_path, exist_ok=True)
-    hidden_target = hide_username_in_path(new_folder_path)
-    print(f"New folder created at: {hidden_target}")
-
-    extensions = ['.sav', '.onl', '.vdf']
-    files_to_copy = [f for f in os.listdir(base_url) if os.path.splitext(f)[1] in extensions and save_mode in f or "profile" in f.lower()]
-    for file in files_to_copy:
-        src_path = os.path.join(base_url, file)
-        dest_path = os.path.join(new_folder_path, file)
-        shutil.copy(src_path, dest_path)
-        hidden_base = hide_username_in_path(base_url)
-        hidden_target = hide_username_in_path(new_folder_path)
-        print(f"Copied '{file}' from '{hidden_base}' to '{hidden_target}'")
+def get_mode_for_slot(config_data, slot_number):
+    """
+    Determines whether the selected slot number is in 'Normal' or 'Hardcore' mode.
+    :param config_data: Dictionary with configuration data.
+    :param slot_number: Selected slot number.
+    :return: Mode ('Normal' or 'Hardcore') for the slot number.
+    """
+    if slot_number in config_data['Normal']:
+        return 'Normal'
+    elif slot_number in config_data['Hardcore']:
+        return 'Hardcore'
+    else:
+        raise ValueError(f"Slot number {slot_number} is not configured in any mode.")

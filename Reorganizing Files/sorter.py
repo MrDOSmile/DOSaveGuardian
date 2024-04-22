@@ -1,7 +1,7 @@
 import os
 import shutil
 import getpass
-from main import hide_username_in_path
+from utils import hide_username_in_path
 
 def create_dir_if_not_exists(path):
     """Ensure directory exists, if not, create it."""
@@ -17,26 +17,6 @@ def copy_file(src, dest):
     src = hide_username_in_path(src)
     dest = hide_username_in_path(dest)
     print(f"Copied file from {src} to {dest}")
-
-def find_game_directory_base_url():
-    """Locate the base directory for game saves."""
-    username = getpass.getuser()
-    base_dir = f"C:\\Users\\{username}\\Saved Games\\Remnant2\\Steam"
-    hidden_base = hide_username_in_path(base_dir)
-    print(f"Looking for game directory at {hidden_base}")
-
-    if not os.path.exists(base_dir):
-        print("Base directory not found. Please check proper game installation.")
-        return None
-
-    first_dir = os.listdir(base_dir)[0] if os.listdir(base_dir) else None
-    if first_dir:
-        hidden_first = hide_username_in_path(first_dir)
-        print(f"Using subdirectory {hidden_first} under base directory.")
-        return os.path.join(base_dir, first_dir)
-    else:
-        print("No subdirectories found under base directory.")
-        return None
 
 def process_directory(root_dir):
     """Process directories to find and copy specific files to corresponding slots."""
