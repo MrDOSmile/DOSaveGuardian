@@ -308,7 +308,7 @@ def color(text, color_name):
 # Import statements and all other function definitions remain as previously defined
 
 def menu():
-    # base_url = find_game_directory_base_url()
+    base_url = find_game_directory_base_url()
     # if not base_url:
     #     print("Failed to find the game directory. Please ensure the game is properly installed.")
     #     return
