@@ -16,14 +16,15 @@ def check_config_exists():
 def create_config():
     """Create or update the config.json file to define Normal and Hardcore slots dynamically."""
     while True:
-        normal_input = input("Enter the save slot numbers for 'Normal' separated by commas (e.g., 1, 2, 3): ")
+        os.system("cls")
+        normal_input = input(f"Enter the save slot numbers for {color('Normal', "green")} separated by commas (e.g., 1, 2, 3): ")
         normal_list = [int(n.strip()) for n in normal_input.split(',') if n.strip().isdigit()]
 
-        hardcore_input = input("Enter the save slot numbers for 'Hardcore' separated by commas (e.g., 4, 5): ")
+        hardcore_input = input(f"Enter the save slot numbers for {color('Hardcore', "red")} separated by commas (e.g., 4, 5): ")
         hardcore_list = [int(n.strip()) for n in hardcore_input.split(',') if n.strip().isdigit()]
 
         if set(normal_list) & set(hardcore_list):
-            print("Duplicate slots found between 'Normal' and 'Hardcore'. Please start over.")
+            print(f"Duplicate slots found between {color('Normal', "green")} and {color('Hardcore', "red")}. Please start over.")
             continue
 
         config_data = {
@@ -45,11 +46,14 @@ def select_save_slot():
     """Prompt user to select a save slot from configured options."""
     while True:
         config_data = read_config()
-        print("Select a save slot:")
+        print(f"\n{color("Select a save slot:", "purple")}")
         all_slots = {**dict.fromkeys(config_data['Normal'], 'Normal'), **dict.fromkeys(config_data['Hardcore'], 'Hardcore')}
         for slot, mode in sorted(all_slots.items()):
-            print(f"{slot}: {mode}")
-        slot_choice = input("Enter slot number or type 'config' to update slot configuration: ")
+            if mode == "Normal":
+                print(f"{slot}: {color(mode, "green")}")
+            else:
+                print(f"{slot}: {color(mode, "red")}")
+        slot_choice = input(f"Enter slot number or type {color("'config'", "purple")} to update slot configuration: ")
         if slot_choice.lower() == 'config':
             create_config()
             continue
@@ -177,7 +181,7 @@ def restore_from_backup(base_url, slot_number, restore_profile=False):
     for file in backup_files:
         src_path = os.path.join(latest_backup_dir, file)
         shutil.copy(src_path, base_url)
-        print(f"Restored '{file}' from backup in '{latest_backup_dir}'.")
+        print(f"Restored '{file}' from backup in '{hide_username_in_path(latest_backup_dir)}'.")
 
 
 def create_and_copy_to_new_folder(base_url, slot_number):
@@ -277,6 +281,27 @@ def choose_save_directory(base_url, slot_number):
 
     return temp_save_dir
 
+def color(text, color_name):
+    colors = {
+        'black': '\033[30m',
+        'red': '\033[31m',
+        'green': '\033[32m',
+        'yellow': '\033[33m',
+        'blue': '\033[34m',
+        'purple': '\033[35m',
+        'cyan': '\033[36m',
+        'lightgray': '\033[37m',
+        'darkgray': '\033[90m',
+        'lightred': '\033[91m',
+        'lightgreen': '\033[92m',
+        'lightyellow': '\033[93m',
+        'lightblue': '\033[94m',
+        'lightpurple': '\033[95m',
+        'lightcyan': '\033[96m',
+        'white': '\033[97m',
+        'end': '\033[0m',
+    }
+    return f"{colors.get(color_name, colors['end'])}{text}{colors['end']}"
 
 
 
@@ -298,14 +323,17 @@ def menu():
             print(f"'Saves' directory created at: {hide_username_in_path(save_dir)}")
 
         while True:
-            print("\nMain Menu:")
-            print("1. Full Backup")
-            print("2. Restore Backup")
-            print("3. Load Save")
-            print("4. Create New Save")
-            print("5. Help")
-            print("6. Change Slot")
-            print("7. Quit")
+            if mode == "Normal":
+                print(f"\n{color(mode, "green")} {color("Main Menu", "purple")}:")
+            else:
+                print(f"\n{color(mode, "red")} {color("Main Menu", "purple")}:")
+            print(f"1. {color("Full Backup", "cyan")}")
+            print(f"2. {color("Restore Backup", "blue")}")
+            print(f"3. {color("Load Save", "lightblue")}")
+            print(f"4. {color("Create New Save", "green")}")
+            print(f"5. {color("Help", "yellow")}")
+            print(f"6. {color("Change Slot", 'purple')}")
+            print(f"7. {color("Quit", "red")}")
 
             choice = input("Enter your choice: ")
             os.system("cls")
@@ -314,7 +342,7 @@ def menu():
                 full_backup_files(base_url)
             elif choice == "2":
                 if mode == "Hardcore":
-                    restore_profile = input("Restore profile data as well? (yes/no): ").lower() == 'yes'
+                    restore_profile = input(f"This is meant for {color("Hardcore", "red")}.\nIf your character died, you must restore profile and restart your game.\nRestore profile data as well? ({color("yes", "green")}/{color("no", "red")}): ").lower() == 'yes'
                 else:
                     restore_profile = False
                 restore_from_backup(base_url, slot_number, restore_profile)
