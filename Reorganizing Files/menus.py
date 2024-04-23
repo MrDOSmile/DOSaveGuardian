@@ -1,5 +1,5 @@
 from mode_config import check_config_exists, create_config, read_config
-from backup_restore import full_backup_files, find_game_directory_base_url, choose_save_directory, create_and_copy_to_new_folder
+from backup_restore import full_backup_files, find_game_directory_base_url, create_and_copy_to_new_folder
 import json
 import os
 
@@ -82,7 +82,8 @@ def display_mode_specific_menu(mode, slot):
             # restore_from_backup(base_url, profile=False)
             print(nonfunc)
         elif action == "2":
-            choose_save_directory(base_url)
+            print(nonfunc)
+            # choose_save_directory(base_url)
         elif action == "3":
             create_and_copy_to_new_folder(base_url)
         elif action == "4":

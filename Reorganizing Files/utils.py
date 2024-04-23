@@ -1,7 +1,6 @@
 import os
 import getpass
 import shutil
-from tkinter import filedialog, simpledialog, Tk
 
 def hide_username_in_path(path):
     username = getpass.getuser()
