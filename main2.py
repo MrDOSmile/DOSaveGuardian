@@ -176,8 +176,7 @@ def restore_from_backup(base_url, slot_number, restore_profile=False):
 
     for file in backup_files:
         src_path = os.path.join(latest_backup_dir, file)
-        dest_path = os.path.join(base_url, "Saves", file)
-        shutil.copy(src_path, dest_path)
+        shutil.copy(src_path, base_url)
         print(f"Restored '{file}' from backup in '{latest_backup_dir}'.")
 
 
@@ -217,12 +216,15 @@ def create_and_copy_to_new_folder(base_url, slot_number):
         print(f"Copied '{file}' from '{hide_username_in_path(src_path)}' to '{hide_username_in_path(dest_path)}'.")
 
 def choose_save_directory(base_url, slot_number):
-    """Select a directory, clear 'TempSaves', and copy the correct save file based on the slot number to a cleaned temporary directory."""
+    """Select a directory, clear 'TempSaves', and handle files based on whether the directory is a backup directory or not.
+    In case of backup directories, only process the save file that matches the current slot."""
     if base_url is None:
         return None
 
     save_dir = os.path.join(base_url, "Saves")
     temp_save_dir = os.path.join(base_url, "TempSaves")
+    backups_dir = os.path.join(base_url, "Backups")
+
     # Ensure the temporary directory exists and is empty
     if not os.path.exists(temp_save_dir):
         os.makedirs(temp_save_dir)
@@ -234,24 +236,49 @@ def choose_save_directory(base_url, slot_number):
 
     root = Tk()
     root.withdraw()
-    chosen_dir = filedialog.askdirectory(initialdir=save_dir, title="Select a directory containing the save file to load")
+    chosen_dir = filedialog.askdirectory(initialdir=save_dir, title="Select the directory containing the save files")
 
     if not chosen_dir:
         print("No directory was selected.")
         return None
 
-    specific_save_file = f"save_{slot_number - 1}.sav"
-    file_path = os.path.join(chosen_dir, specific_save_file)
+    # Check if the chosen directory is within the Backups directory or its subdirectories
+    is_backup_dir = os.path.abspath(chosen_dir).startswith(os.path.abspath(backups_dir))
 
-    if os.path.exists(file_path):
-        new_file_name = specific_save_file  # Keeping the name based on the slot number
-        dest_path = os.path.join(temp_save_dir, new_file_name)
-        shutil.copy(file_path, dest_path)
-        print(f"Save file '{specific_save_file}' has been prepared for loading from '{hide_username_in_path(chosen_dir)}' to temporary storage.")
-        return dest_path
+    # Determine the correct filename to process
+    specific_save_file = f"save_{slot_number - 1}.sav"
+
+    if is_backup_dir:
+        # If the chosen directory is a backup directory, only handle the specific save file
+        file_path = os.path.join(chosen_dir, specific_save_file)
+        if os.path.exists(file_path):
+            dest_path = os.path.join(temp_save_dir, specific_save_file)
+            shutil.copy(file_path, dest_path)
+            print(f"Backup file '{specific_save_file}' has been processed and prepared in temporary storage.")
+        else:
+            print(f"The specific backup file '{specific_save_file}' does not exist in the selected backup directory.")
+            return None
     else:
-        print(f"The specific save file '{specific_save_file}' does not exist in the selected directory.")
-        return None
+        # Process all .sav files in the chosen directory
+        files_to_copy = [f for f in os.listdir(chosen_dir) if f.endswith('.sav')]
+        for file_name in files_to_copy:
+            src_path = os.path.join(chosen_dir, file_name)
+            new_file_name = specific_save_file if file_name.startswith("save_") and file_name.endswith(".sav") else file_name
+            dest_path = os.path.join(temp_save_dir, new_file_name)
+            shutil.copy(src_path, dest_path)
+            print(f"File '{file_name}' has been copied and renamed to '{new_file_name}' in temporary storage.")
+
+    # Copy the relevant save file back to the base_url
+    temp_file_path = os.path.join(temp_save_dir, specific_save_file)
+    if os.path.exists(temp_file_path):
+        final_dest_path = os.path.join(base_url, specific_save_file)
+        shutil.copy(temp_file_path, final_dest_path)
+        print(f"File '{specific_save_file}' has been copied back to the game base directory.")
+
+    return temp_save_dir
+
+
+
 
 # Import statements and all other function definitions remain as previously defined
 
@@ -260,6 +287,8 @@ def menu():
     if not base_url:
         print("Failed to find the game directory. Please ensure the game is properly installed.")
         return
+    else:
+        full_backup_files(base_url)  # Perform a full backup after ensuring the Saves directory exists
 
     while True:
         slot_number, mode = select_save_slot()
@@ -267,8 +296,6 @@ def menu():
         if not os.path.exists(save_dir):
             os.makedirs(save_dir)
             print(f"'Saves' directory created at: {hide_username_in_path(save_dir)}")
-
-        full_backup_files(base_url)  # Perform a full backup after ensuring the Saves directory exists
 
         while True:
             print("\nMain Menu:")
