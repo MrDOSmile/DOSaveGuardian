@@ -28,31 +28,31 @@ def hide_username_in_path(path):
     return(path.replace(f"C:\\Users\\{username}", "C:\\Users\\<Username>"))
 
 # def mode_backup_files(base_url):
-    if base_url is None:
-        return
+    # if base_url is None:
+    #     return
 
-    global save_mode
-    extensions = ['.bak1', '.bak2', '.bak3', '.sav', '.onl', '.vdf']
-    # Include any file that has the mode string or "profile" in its name
-    files_to_backup = [f for f in os.listdir(base_url) if (os.path.splitext(f)[1] in extensions and save_mode in f) or "profile" in f.lower()]
+    # global save_mode
+    # extensions = ['.bak1', '.bak2', '.bak3', '.sav', '.onl', '.vdf']
+    # # Include any file that has the mode string or "profile" in its name
+    # files_to_backup = [f for f in os.listdir(base_url) if (os.path.splitext(f)[1] in extensions and save_mode in f) or "profile" in f.lower()]
 
-    if not files_to_backup:
-        print("No files found to backup.")
-        return
+    # if not files_to_backup:
+    #     print("No files found to backup.")
+    #     return
 
-    backup_folders = [d for d in os.listdir(base_url) if "backup" in d.lower()]
-    if not backup_folders:
-        print("No backup directories found to store the files.")
-        return
+    # backup_folders = [d for d in os.listdir(base_url) if "backup" in d.lower()]
+    # if not backup_folders:
+    #     print("No backup directories found to store the files.")
+    #     return
 
-    target_backup_folder = os.path.join(base_url, backup_folders[0])
-    for file in files_to_backup:
-        src_path = os.path.join(base_url, file)
-        dest_path = os.path.join(target_backup_folder, file)
-        shutil.copy(src_path, dest_path)
-        hidden_base = hide_username_in_path(base_url)
-        hidden_target = hide_username_in_path(target_backup_folder)
-        print(f"Copied '{file}' from '{hidden_base}' to '{hidden_target}'")
+    # target_backup_folder = os.path.join(base_url, backup_folders[0])
+    # for file in files_to_backup:
+    #     src_path = os.path.join(base_url, file)
+    #     dest_path = os.path.join(target_backup_folder, file)
+    #     shutil.copy(src_path, dest_path)
+    #     hidden_base = hide_username_in_path(base_url)
+    #     hidden_target = hide_username_in_path(target_backup_folder)
+    #     print(f"Copied '{file}' from '{hidden_base}' to '{hidden_target}'")
 
 def full_backup_files(base_url):
     if base_url is None:
