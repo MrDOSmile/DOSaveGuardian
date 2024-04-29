@@ -17,18 +17,19 @@ The Game Save Manager is a Python-based utility designed to help users manage sa
 
 1. **Prerequisites**:
    - Python 3.12.3 or higher. If you do not have Python installed, download it from [here](https://www.python.org/ftp/python/3.12.3/python-3.12.3-amd64.exe).
+   - Ensure that when installing Python, click the box in the bottom left corner to add to 'PATH' variables.
    - Access to Windows OS with administrative privileges (to manage file paths and directories).
 
 2. **Setup**:
-   - Clone or download this repository to your local machine.
+   - Clone or download this repository to your local machine. Best place would be a new folder on your desktop for easy access.
    - Navigate to the project directory in a command prompt or terminal.
    - To simplify the launch process, a `launch.bat` file is provided. Double-click on this file to start the utility.
 
 ## Usage
 
 1. **Configuration**:
-   - Upon first launch, you'll be prompted to configure the save slots for 'Normal' and 'Hardcore' modes by entering slot numbers.
-   - The configuration will be saved in `config.json` in the script directory, which you can update anytime by selecting the 'config' option from the main menu.
+   - Upon first launch, you'll have to go through a first time process. You'll be prompted to understand some terms of use, then to configure the save slots for 'Normal' and 'Hardcore' modes by entering slot numbers.
+   - The configuration will be saved, which you can update anytime by selecting the 'config' option from the slot selection menu.
 
 2. **Backup Saves**:
    - Choose the "Full Backup" option from the main menu to backup all save files to the designated backup directory.
