@@ -4,6 +4,7 @@ import json
 import shutil
 from tkinter import filedialog, simpledialog, Tk
 import getpass
+from agreement import program_introduction
 
 # Configuration for dynamic slot handling
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -303,7 +304,17 @@ def color(text, color_name):
     }
     return f"{colors.get(color_name, colors['end'])}{text}{colors['end']}"
 
-
+def print_help():
+    print("\nHelp Information:")
+    print(f"1. {color('Full Backup', 'cyan')}: This option creates a full backup of your current save files to a designated backup directory.")
+    print(f"2. {color('Restore Backup', 'blue')}: Restore your saved files from a backup. In Hardcore mode, you can also choose to restore profile data.")
+    print(f"3. {color('Load Save', 'lightblue')}: Allows you to select a save directory and load a specific save file.")
+    print(f"4. {color('Create New Save', 'green')}: Create a new folder and copy specific save and profile data from your current directory.")
+    print(f"5. {color('Help', 'yellow')}: Displays this help information.")
+    print(f"6. {color('Change Slot', 'purple')}: Allows you to switch between different save slots configured at the start.")
+    print(f"7. {color('Quit', 'red')}: Exits the program.")
+    print("\nUse these options to manage your game saves effectively. Each option guides you through the necessary steps to perform the desired action.")
+    input("\nPress Enter to return to the main menu...")
 
 # Import statements and all other function definitions remain as previously defined
 
@@ -351,7 +362,7 @@ def menu():
             elif choice == "4":
                 create_and_copy_to_new_folder(base_url, slot_number)  # Pass slot_number here
             elif choice == "5":
-                print("Help information...")
+                print_help()
             elif choice == "6":
                 break  # Exit the inner loop to re-select a save slot
             elif choice == "7":
@@ -361,6 +372,8 @@ def menu():
                 print("Invalid choice. Please enter a number from the menu.")
 
 if __name__ == "__main__":
+    os.system("cls")
+    program_introduction()
     if not check_config_exists():
         create_config()
     try:
