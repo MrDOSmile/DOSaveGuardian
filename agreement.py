@@ -1,9 +1,15 @@
 import json
+import os
+
+def get_base_path():
+    """Get the directory path of the currently running script."""
+    return os.path.dirname(os.path.abspath(__file__))
 
 def has_user_agreed():
     """Check if the user has already agreed to the terms."""
+    agreement_path = os.path.join(get_base_path(), 'agreement.json')
     try:
-        with open('agreement.json', 'r') as file:
+        with open(agreement_path, 'r') as file:
             agreement = json.load(file)
         return agreement.get('agreed', False)
     except FileNotFoundError:
@@ -11,7 +17,8 @@ def has_user_agreed():
 
 def save_user_agreement():
     """Save user's agreement to the terms in a JSON file."""
-    with open('agreement.json', 'w') as file:
+    agreement_path = os.path.join(get_base_path(), 'agreement.json')
+    with open(agreement_path, 'w') as file:
         json.dump({'agreed': True}, file)
 
 def confirm_understanding(section):
