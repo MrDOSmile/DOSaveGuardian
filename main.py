@@ -85,13 +85,13 @@ def swap_menus():
 main_menu = Entity(enabled=True, scale=(7,7,7))
 dropdown = DropdownMenu('Select Slot', buttons=[
     DropdownMenuButton(f'Slot {i}', on_click=Func(select_slot, i), color=color.dark_gray) for i in range(1, 6)
-], parent=main_menu, scale=(0.3,0.04), color=color.dark_gray)
+], parent=main_menu, scale=(0.4,0.04), color=color.dark_gray)
 dropdown.position = (-0.15, 0.4)
 slot_text = Text(text='Selected Slot: 1', position=(0, 0.45), origin=(0, 0), color=color.white, scale=(1.2), parent=main_menu)
-backup_button = Button(text='Full Backup', color=color.azure, y=0.1, scale_y=0.1, on_click=backup, parent=main_menu)
-restore_button = Button(text='Restore from Backup', color=color.blue, y=0, scale_y=0.1, on_click=swap_menus, parent=main_menu)
-load_button = Button(text='Load Save', color=color.orange, y=-0.1, scale_y=0.1, on_click=load, parent=main_menu)
-create_button = Button(text='Create New Save', color=color.green, y=-0.2, scale_y=0.1, on_click=create, parent=main_menu)
+backup_button = Button(text='Full Backup', color=color.azure, y=0.2, scale_y=0.1, on_click=backup, parent=main_menu)
+restore_button = Button(text='Restore from Backup', color=color.blue, y=0.1, scale_y=0.1, on_click=swap_menus, parent=main_menu)
+load_button = Button(text='Load Save', color=color.orange, y=-0.05, scale_y=0.1, on_click=load, parent=main_menu)
+create_button = Button(text='Create New Save', color=color.green, y=-0.15, scale_y=0.1, on_click=create, parent=main_menu)
 actions_text = Text(text='', position=(0, -0.4), origin=(0, 0), color=color.white, parent=main_menu)
 
 # Restore confirmation popup
