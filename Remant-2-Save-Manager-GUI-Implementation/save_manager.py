@@ -9,19 +9,6 @@ import getpass
 script_dir = os.path.dirname(os.path.abspath(__file__))
 config_path = os.path.join(script_dir, 'config.json')
 
-def check_config_exists():
-    return os.path.exists(config_path)
-
-def create_config():
-    normal_list, hardcore_list = [], []
-    config_data = {"Normal": normal_list, "Hardcore": hardcore_list}
-    with open(config_path, 'w') as config_file:
-        json.dump(config_data, config_file, indent=4)
-
-def read_config():
-    with open(config_path, 'r') as config_file:
-        return json.load(config_file)
-
 def find_game_directory_base_url():
     username = getpass.getuser()
     base_dir = f"C:\\Users\\{username}\\Saved Games\\Remnant2\\Steam"
@@ -159,11 +146,3 @@ def create_save(base_url, slot_number):
     specific_save_file = f"save_{slot_number - 1}.sav"
     shutil.copy(os.path.join(base_url, specific_save_file), os.path.join(new_folder_path, specific_save_file))
     return(new_folder_name)
-
-if __name__ == "__main__":
-    if not check_config_exists():
-        create_config()
-    base_url = find_game_directory_base_url()
-    full_backup_files(base_url)  # Perform a full backup
-    restore_from_backup(base_url, 1, True)  # Example slot and profile restoration
-    create_save(base_url, 1)  # Example folder creation and file copying
