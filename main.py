@@ -39,7 +39,7 @@ def load():
     print('Loading from folder.')
     temp_dir = load_save(base, slots)
     if temp_dir is not None:
-        update_action_log(f'Loaded file from {temp_dir}')
+        update_action_log(f'Loaded file from {hide_username_in_path(temp_dir)}')
     else:
         update_action_log('No save was selected')
 
@@ -47,7 +47,7 @@ def create():
     print('Creating new save.')
     new_folder_name = create_save(base, slots)
     if new_folder_name is not None:
-        update_action_log(f'Created new save called {new_folder_name}')
+        update_action_log(f'Created new save called {hide_username_in_path(new_folder_name)}')
     else:
         update_action_log('No new save was made')
 
