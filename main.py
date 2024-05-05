@@ -9,6 +9,7 @@ window.fps_counter.enabled = False
 window.entity_counter.enabled = False
 window.exit_button.enabled = False
 window.collider_counter.enabled = False
+window.color = color.black
 
 slots = 1  # Variable to store the chosen slot as an integer
 
@@ -83,8 +84,8 @@ def swap_menus():
 
 main_menu = Entity(enabled=True, scale=(7,7,7))
 dropdown = DropdownMenu('Select Slot', buttons=[
-    DropdownMenuButton(f'Slot {i}', on_click=Func(select_slot, i)) for i in range(1, 6)
-], parent=main_menu, scale=(0.3,0.04))
+    DropdownMenuButton(f'Slot {i}', on_click=Func(select_slot, i), color=color.dark_gray) for i in range(1, 6)
+], parent=main_menu, scale=(0.3,0.04), color=color.dark_gray)
 dropdown.position = (-0.15, 0.4)
 slot_text = Text(text='Selected Slot: 1', position=(0, 0.45), origin=(0, 0), color=color.white, scale=(1.2), parent=main_menu)
 backup_button = Button(text='Full Backup', color=color.azure, y=0.1, scale_y=0.1, on_click=backup, parent=main_menu)
