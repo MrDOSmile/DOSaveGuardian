@@ -33,12 +33,6 @@ def backup():
     full_backup_files(base)
     update_action_log('Full backup succesful')
 
-def restore():
-    print('Restore from Backup initiated.')
-    restore_confirmation.enabled = True
-    restore_from_backup(base, slots, restore_profile)
-    update_action_log(f'Restored save for save slot {slots}')
-
 def load():
     print('Loading from folder.')
     temp_dir = load_save(base, slots)
@@ -62,37 +56,47 @@ def select_slot(value):
     slot_text.text = f'Selected Slot: {value}'
 
 # Confirmation for restoring profile
-def confirm_restore():
+def profile_restore():
     global restore_profile
     restore_profile = True
     print(f'Restore profile: {restore_profile}')
-    restore_confirmation.enabled = False
-    update_action_log('Profile restoration confirmed.')
+    restore_from_backup(base, slots, restore_profile)
+    swap_menus()
+    update_action_log('Restored world and profile data')
 
-def cancel_restore():
+def no_profile_restore():
     global restore_profile
     restore_profile = False
     print(f'Restore profile: {restore_profile}')
-    restore_confirmation.enabled = False
-    update_action_log('Profile restoration cancelled.')
+    restore_from_backup(base, slots, restore_profile)
+    swap_menus()
+    update_action_log('Restored just world data')
 
+def cancel_restore():
+    update_action_log('Restoring from backup was cancelled')
+    swap_menus()
+
+def swap_menus():
+    restore_confirmation.enabled = not restore_confirmation.enabled
+    main_menu.enabled = not main_menu.enabled
+
+main_menu = Entity(enabled=True, scale=(7,7,7))
 dropdown = DropdownMenu('Select Slot', buttons=[
     DropdownMenuButton(f'Slot {i}', on_click=Func(select_slot, i)) for i in range(1, 6)
-])
-dropdown.position = (-0.12, 0.4)
-
-slot_text = Text(text='Default is save slot 1', position=(0, 0.45), origin=(0, 0), color=color.white)
-
-backup_button = Button(text='Full Backup', color=color.azure, y=0.1, scale_y=0.1, on_click=backup)
-restore_button = Button(text='Restore from Backup', color=color.blue, y=0, scale_y=0.1, on_click=restore)
-load_button = Button(text='Load Save', color=color.orange, y=-0.1, scale_y=0.1, on_click=load)
-create_button = Button(text='Create New Save', color=color.green, y=-0.2, scale_y=0.1, on_click=create)
-
-actions_text = Text(text='', position=(0, -0.4), origin=(0, 0), color=color.white)
+], parent=main_menu, scale=(0.3,0.04))
+dropdown.position = (-0.15, 0.4)
+slot_text = Text(text='Selected Slot: 1', position=(0, 0.45), origin=(0, 0), color=color.white, scale=(1.2), parent=main_menu)
+backup_button = Button(text='Full Backup', color=color.azure, y=0.1, scale_y=0.1, on_click=backup, parent=main_menu)
+restore_button = Button(text='Restore from Backup', color=color.blue, y=0, scale_y=0.1, on_click=swap_menus, parent=main_menu)
+load_button = Button(text='Load Save', color=color.orange, y=-0.1, scale_y=0.1, on_click=load, parent=main_menu)
+create_button = Button(text='Create New Save', color=color.green, y=-0.2, scale_y=0.1, on_click=create, parent=main_menu)
+actions_text = Text(text='', position=(0, -0.4), origin=(0, 0), color=color.white, parent=main_menu)
 
 # Restore confirmation popup
-restore_confirmation = Entity(enabled=False)
-confirm_button = Button(parent=restore_confirmation, text='Yes', y=0, x=-0.1, color=color.lime, scale_y=0.1, on_click=confirm_restore)
-cancel_button = Button(parent=restore_confirmation, text='No', y=0, x=0.1, color=color.red, scale_y=0.1, on_click=cancel_restore)
+restore_confirmation = Entity(enabled=False, scale=(7,7,7))
+confirmation_text = Text(text="Would you like to restore your profile as well?", position=(0,0.1), origin=(0,0), color=color.white, parent=restore_confirmation, scale=1.2)
+yes_button = Button(parent=restore_confirmation, text='Yes', y=0, x=-0.1, color=color.lime, scale_y=0.1, scale_x=0.2, on_click=profile_restore)
+no_button = Button(parent=restore_confirmation, text='No', y=0, x=0.1, color=color.red, scale_y=0.1, scale_x=0.2, on_click=no_profile_restore)
+cancel_button = Button(parent=restore_confirmation, text='Cancel', y=-0.1, x=0, color=color.orange, scale_y=0.1, scale_x=0.4, on_click=cancel_restore)
 
 app.run()
