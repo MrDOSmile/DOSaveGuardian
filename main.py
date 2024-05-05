@@ -184,7 +184,6 @@ def restore_from_backup(base_url, slot_number, restore_profile=False):
         shutil.copy(src_path, base_url)
         print(f"Restored '{file}' from backup in '{hide_username_in_path(latest_backup_dir)}'.")
 
-
 def create_and_copy_to_new_folder(base_url, slot_number):
     """Create a new folder in a selected directory and copy specific save data and profile data from base_url."""
     if base_url is None:

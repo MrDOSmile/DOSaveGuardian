@@ -39,10 +39,21 @@ def restore():
     restore_from_backup(base, slots, restore_profile)
     update_action_log(f'Restored save for save slot {slots}')
 
-def create_save():
+def load():
+    print('Loading from folder.')
+    temp_dir = load_save(base, slots)
+    if temp_dir is not None:
+        update_action_log(f'Loaded file from {temp_dir}')
+    else:
+        update_action_log('No save was selected')
+
+def create():
     print('Creating new save.')
-    new_folder_name = create_and_copy_to_new_folder(base, slots)
-    update_action_log(f'Created new save called {new_folder_name}')
+    new_folder_name = create_save(base, slots)
+    if new_folder_name is not None:
+        update_action_log(f'Created new save called {new_folder_name}')
+    else:
+        update_action_log('No new save was made')
 
 # Function to update the selected slot
 def select_slot(value):
@@ -73,8 +84,9 @@ dropdown.position = (-0.12, 0.4)
 slot_text = Text(text='Default is save slot 1', position=(0, 0.45), origin=(0, 0), color=color.white)
 
 backup_button = Button(text='Full Backup', color=color.azure, y=0.1, scale_y=0.1, on_click=backup)
-restore_button = Button(text='Restore from Backup', color=color.orange, y=0, scale_y=0.1, on_click=restore)
-create_button = Button(text='Create New Save', color=color.green, y=-0.1, scale_y=0.1, on_click=create_save)
+restore_button = Button(text='Restore from Backup', color=color.blue, y=0, scale_y=0.1, on_click=restore)
+load_button = Button(text='Load Save', color=color.orange, y=-0.1, scale_y=0.1, on_click=load)
+create_button = Button(text='Create New Save', color=color.green, y=-0.2, scale_y=0.1, on_click=create)
 
 actions_text = Text(text='', position=(0, -0.4), origin=(0, 0), color=color.white)
 
