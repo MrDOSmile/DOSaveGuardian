@@ -1,6 +1,4 @@
 import os
-import sys
-import json
 import shutil
 from tkinter import filedialog, simpledialog, Tk
 import getpass
@@ -8,6 +6,23 @@ import getpass
 # Configuration for dynamic slot handling
 script_dir = os.path.dirname(os.path.abspath(__file__))
 config_path = os.path.join(script_dir, 'config.json')
+
+def ensure_directories_exist(base):
+    # List of required directories
+    required_dirs = ['Backups', 'Saves', 'TempSaves']
+
+    # Loop through the list of required directories and ensure they exist
+    for dir_name in required_dirs:
+        # Construct the full path to the directory
+        dir_path = os.path.join(base, dir_name)
+
+        # Check if the directory exists
+        if not os.path.exists(dir_path):
+            # If the directory does not exist, create it
+            os.makedirs(dir_path)
+            print(f"Created directory: {dir_path}")
+        else:
+            print(f"Directory already exists: {dir_path}")
 
 def find_game_directory_base_url():
     username = getpass.getuser()

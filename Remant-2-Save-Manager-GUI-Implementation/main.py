@@ -18,6 +18,7 @@ restore_profile = None
 
 # Defining the base directory for the files.
 base = find_game_directory_base_url()
+ensure_directories_exist(base)
 
 def update_action_log(action):
     # Add the new action at the start of the list
