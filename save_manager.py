@@ -1,4 +1,5 @@
 import os
+import re
 import shutil
 from tkinter import filedialog, simpledialog, Tk
 import getpass
@@ -33,6 +34,18 @@ def find_game_directory_base_url():
     if first_dir:
         return os.path.join(base_dir, first_dir)
     return None
+
+def check_number_of_save_slots(base):
+    pattern = re.compile(r'save_(\d+)\.sav$')
+
+    save_slots = []
+    for filename in os.listdir(base):
+        match = pattern.match(filename)
+        if match:
+            slot_number = int(match.group(1))
+            save_slots.append(slot_number)
+
+    return(save_slots)
 
 def hide_username_in_path(path):
     username = getpass.getuser()
