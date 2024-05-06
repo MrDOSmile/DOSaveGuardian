@@ -1,12 +1,21 @@
 @echo off
 
 rem Set the directory where your repository is located
-set REPO_DIR=Path\To\Your\Repo
+set REPO_DIR="https://github.com/MrDOSmile/DOSaveGuardian"
+
+rem Check if Git is installed by trying to execute a Git command
+git --version > nul 2>&1
+if %errorlevel% neq 0 (
+    echo Git is not installed.
+    echo Opening browser to download Git...
+    start https://git-scm.com/downloads
+    goto end
+)
 
 rem Change to the repository directory
 cd /D %REPO_DIR%
 
-rem Check for Git and repository
+rem Check for repository existence
 if not exist .git (
     echo This directory is not a Git repository.
     goto end
