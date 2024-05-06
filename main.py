@@ -113,6 +113,7 @@ create_button.tooltip = Tooltip("Opens up a window where you select a folder. On
 
 # Restore confirmation popup
 restore_confirmation = Entity(enabled=False, scale=(7,7,7))
+slot_text_data = Text(text=f'Selected Character Slot: {slots+1}', position=(0, 0.15), origin=(0, 0), color=color.white, scale=(1.2), parent=restore_confirmation)
 confirmation_text = Text(text="Please choose an option to restore that type of data:", position=(0,0.1), origin=(0,0), color=color.white, parent=restore_confirmation, scale=1.2)
 profile_button = Button(parent=restore_confirmation, text='Profile Data', y=0, x=-0.35, color=color.violet, scale_y=0.1, scale_x=0.4, on_click=profile_restore)
 world_button = Button(parent=restore_confirmation, text='World Data', y=0, x=0.35, color=color.red, scale_y=0.1, scale_x=0.4, on_click=world_restore)
