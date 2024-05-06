@@ -33,7 +33,7 @@ def update_action_log(action):
 def backup():
     print('Full Backup initiated.')
     full_backup_files(base)
-    update_action_log('Full backup succesful')
+    update_action_log('Full backup successful')
 
 def load():
     print('Loading from folder.')
@@ -62,17 +62,23 @@ def profile_restore():
     global restore_profile
     restore_profile = True
     print(f'Restore profile: {restore_profile}')
-    restore_from_backup(base, slots, restore_profile)
+    worked = restore_from_backup(base, slots, restore_profile)
     swap_menus()
-    update_action_log('Restored world and profile data')
+    if worked:
+        update_action_log('Restored world and profile data')
+    else:
+        update_action_log('No backup exists for current save slot')
 
 def no_profile_restore():
     global restore_profile
     restore_profile = False
     print(f'Restore profile: {restore_profile}')
-    restore_from_backup(base, slots, restore_profile)
+    worked = restore_from_backup(base, slots, restore_profile)
     swap_menus()
-    update_action_log('Restored just world data')
+    if worked:
+        update_action_log('Restored just world data')
+    else:
+        update_action_log('No backup exists for current save slot')
 
 def cancel_restore():
     update_action_log('Restoring from backup was cancelled')

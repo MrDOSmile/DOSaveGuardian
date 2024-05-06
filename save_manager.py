@@ -82,8 +82,12 @@ def restore_from_backup(base_url, slot_number, restore_profile=False):
     if not os.path.exists(backup_base_dir):
         return
     latest_backup_dir = os.path.join(backup_base_dir, "full_backup_10")
-    file_to_restore = f"save_{slot_number - 1}.sav"
-    shutil.copy(os.path.join(latest_backup_dir, file_to_restore), base_url)
+    try:
+        file_to_restore = f"save_{slot_number - 1}.sav"
+        shutil.copy(os.path.join(latest_backup_dir, file_to_restore), base_url)
+        return(True)
+    except:
+        return(False)
 
 def load_save(base_url, slot_number):
     """Select a directory, clear 'TempSaves', and handle files based on whether the directory is a backup directory or not.
