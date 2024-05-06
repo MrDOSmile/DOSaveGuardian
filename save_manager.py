@@ -196,17 +196,17 @@ def load_save(base_url, slot_number):
 
     return temp_save_dir
 
-def create_save(base_url, slot_number):
+def create_save(save_name, slot_number):
+    base_url = find_game_directory_base_url()
     if base_url is None:
         return
     root = Tk()
     root.withdraw()
     target_directory = filedialog.askdirectory(initialdir=os.path.join(base_url, "Saves"))
-    new_folder_name = simpledialog.askstring("New Folder Name", "Enter the name of the new folder:")
-    if new_folder_name is None:
-        return(None)
-    new_folder_path = os.path.join(target_directory, new_folder_name)
+    if not target_directory:
+        return(False)
+    new_folder_path = os.path.join(target_directory, save_name)
     os.makedirs(new_folder_path, exist_ok=True)
     specific_save_file = f"save_{slot_number}.sav"
     shutil.copy(os.path.join(base_url, specific_save_file), os.path.join(new_folder_path, specific_save_file))
-    return(new_folder_name)
+    return(True)

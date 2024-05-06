@@ -19,6 +19,7 @@ restore_profile = None
 # Defining the base directory for the files.
 base = find_game_directory_base_url()
 ensure_directories_exist(base)
+global slots
 slots = 0  # Variable to store the chosen slot as an integer
 
 def update_action_log(action):
@@ -43,13 +44,26 @@ def load():
     else:
         update_action_log('No save was selected')
 
-def create():
-    print('Creating new save.')
-    new_folder_name = create_save(base, slots)
-    if new_folder_name is not None:
-        update_action_log(f'Created new save called {hide_username_in_path(new_folder_name)}')
-    else:
-        update_action_log('No new save was made')
+def create(key):
+    if key == 'enter':
+        global new_save_name
+        global slots
+        new_save_name = input_field.text
+        if len(new_save_name) == 0:
+            swap_main_menu()
+            update_action_log("No name was entered")
+        else:
+            swap_main_menu()
+            worked = call_create_save(new_save_name, slots)
+            if worked:
+                update_action_log(f"Created new save called {new_save_name}")
+            else:
+                update_action_log("Cancelled choosing a target location")
+
+
+def call_create_save(new_save_name, slots):
+    worked = create_save(new_save_name, slots)
+    return(worked)
 
 # Function to update the selected slot
 def select_slot(value):
@@ -62,7 +76,7 @@ def select_slot(value):
 def world_restore():
     global slots
     worked = restore_world_from_backup(base, slots)
-    swap_menus()
+    swap_main_menu()
     if worked:
         update_action_log(f'World data restored for slot {slots+1}')
     else:
@@ -71,7 +85,7 @@ def world_restore():
 def profile_restore():
     global slots
     worked = restore_profile_from_backup(base)
-    swap_menus()
+    swap_main_menu()
     if worked:
         update_action_log(f'Profile data restored for slot {slots+1}')
     else:
@@ -80,7 +94,7 @@ def profile_restore():
 def both_restore():
     global slots
     worked = restore_profile_and_world(base, slots)
-    swap_menus()
+    swap_main_menu()
     if worked:
         update_action_log(f'Profile and World data restored for slot {slots+1}')
     else:
@@ -88,11 +102,22 @@ def both_restore():
 
 def cancel_restore():
     update_action_log('Restoring from backup was cancelled')
-    swap_menus()
+    swap_main_menu()
 
-def swap_menus():
-    restore_confirmation.enabled = not restore_confirmation.enabled
-    main_menu.enabled = not main_menu.enabled
+def swap_backup_menu():
+    restore_confirmation.enabled = True
+    main_menu.enabled = False
+    create_save_menu.enabled = False
+
+def swap_main_menu():
+    restore_confirmation.enabled = False
+    main_menu.enabled = True
+    create_save_menu.enabled = False
+
+def swap_create_save():
+    main_menu.enabled = False
+    restore_confirmation.enabled = False
+    create_save_menu.enabled = True
 
 main_menu = Entity(enabled=True, scale=(7,7,7))
 dropdown = DropdownMenu('Select character save slot', buttons=[
@@ -101,9 +126,9 @@ dropdown = DropdownMenu('Select character save slot', buttons=[
 dropdown.position = (-0.2, 0.4)
 slot_text = Text(text=f'Selected Character Slot: {slots+1}', position=(0, 0.2), origin=(0, 0), color=color.white, scale=(2), parent=main_menu)
 backup_button = Button(text='Full Backup', color=color.azure, y=0.1, scale_y=0.1, on_click=backup, parent=main_menu)
-restore_button = Button(text='Restore from Backup', color=color.blue, y=0, scale_y=0.1, on_click=swap_menus, parent=main_menu)
+restore_button = Button(text='Restore from Backup', color=color.blue, y=0, scale_y=0.1, on_click=swap_backup_menu, parent=main_menu)
 load_button = Button(text='Load World Save', color=color.orange, y=-0.15, scale_y=0.1, on_click=load, parent=main_menu)
-create_button = Button(text='Create New Save', color=color.green, y=-0.25, scale_y=0.1, on_click=create, parent=main_menu)
+create_button = Button(text='Create New Save', color=color.green, y=-0.25, scale_y=0.1, on_click=swap_create_save, parent=main_menu)
 actions_text = Text(text='', position=(0, -0.4), origin=(0, 0), color=color.white, parent=main_menu)
 
 # Defining tooltips for main menu buttons
@@ -126,5 +151,17 @@ profile_button.tooltip = Tooltip("Profile data contains the data associated to y
 world_button.tooltip = Tooltip("World data contains the data of your world progress. It will save your shop inventories, current world progression, last checkpoint, etc. This is the most common option when loading a backup.")
 both_button.tooltip = Tooltip("This loads both your Profile data and your World data at the same time from your 'Backups'. Niche use case, but the option is there.")
 cancel_button.tooltip = Tooltip("Used if you don't want to restore anything, and want to return to the main menu.")
+
+
+create_save_menu = Entity(enabled=False, scale=(5,5,5))
+enter_save_name_text = Text(text=f'Enter the name of your new save', position=(0, 0.15), origin=(0, 0), color=color.white, scale=(2), parent=create_save_menu)
+input_field = InputField(text="Test",
+                         placeholder="Name your save here. Make sure it's something you can find later.",
+                         max_lines=1,
+                         origin=(0,0),
+                         scale=(1, 0.2),
+                         position=(0, -0.1), parent=create_save_menu,
+                         input=create,
+                         color=color.dark_gray)
 
 app.run()
