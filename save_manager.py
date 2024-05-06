@@ -94,13 +94,25 @@ def restore_world_from_backup(base_url, slot_number):
     backup_base_dir = os.path.join(base_url, "Backups")
     if not os.path.exists(backup_base_dir):
         return
-    latest_backup_dir = os.path.join(backup_base_dir, "full_backup_10")
+
+    # Find the latest backup directory
+    try:
+        backup_dirs = [d for d in os.listdir(backup_base_dir) if d.startswith('full_backup_')]
+        if not backup_dirs:
+            return False
+        latest_backup_dir = max(backup_dirs, key=lambda x: int(x.split('_')[-1]))
+        latest_backup_path = os.path.join(backup_base_dir, latest_backup_dir)
+    except Exception as e:
+        print(f"Error finding the latest backup directory: {e}")
+        return False
+
     try:
         file_to_restore = f"save_{slot_number}.sav"
-        shutil.copy(os.path.join(latest_backup_dir, file_to_restore), base_url)
-        return(True)
-    except:
-        return(False)
+        shutil.copy(os.path.join(latest_backup_path, file_to_restore), base_url)
+        return True
+    except Exception as e:
+        print(f"Error restoring file: {e}")
+        return False
 
 def restore_profile_from_backup(base_url):
     if base_url is None:
