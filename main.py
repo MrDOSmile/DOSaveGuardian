@@ -99,7 +99,7 @@ dropdown = DropdownMenu('Select character save slot', buttons=[
     DropdownMenuButton(f'Character Slot: {i+1}', on_click=Func(select_slot, i), color=color.dark_gray) for i in check_number_of_save_slots(base)
 ], parent=main_menu, scale=(0.4,0.04), color=color.dark_gray)
 dropdown.position = (-0.2, 0.4)
-slot_text = Text(text=f'Selected Character Slot: {slots+1}', position=(0, 0.45), origin=(0, 0), color=color.white, scale=(1.2), parent=main_menu)
+slot_text = Text(text=f'Selected Character Slot: {slots+1}', position=(0, 0.2), origin=(0, 0), color=color.white, scale=(2), parent=main_menu)
 backup_button = Button(text='Full Backup', color=color.azure, y=0.1, scale_y=0.1, on_click=backup, parent=main_menu)
 restore_button = Button(text='Restore from Backup', color=color.blue, y=0, scale_y=0.1, on_click=swap_menus, parent=main_menu)
 load_button = Button(text='Load World Save', color=color.orange, y=-0.15, scale_y=0.1, on_click=load, parent=main_menu)
@@ -114,7 +114,7 @@ create_button.tooltip = Tooltip("Opens up a window where you select a folder. On
 
 # Restore confirmation popup
 restore_confirmation = Entity(enabled=False, scale=(7,7,7))
-slot_text_data = Text(text=f'Selected Character Slot: {slots+1}', position=(0, 0.15), origin=(0, 0), color=color.white, scale=(1.2), parent=restore_confirmation)
+slot_text_data = Text(text=f'Selected Character Slot: {slots+1}', position=(0, 0.15), origin=(0, 0), color=color.white, scale=(2), parent=restore_confirmation)
 confirmation_text = Text(text="Please choose an option to restore that type of data:", position=(0,0.1), origin=(0,0), color=color.white, parent=restore_confirmation, scale=1.2)
 profile_button = Button(parent=restore_confirmation, text='Profile Data', y=0, x=-0.35, color=color.violet, scale_y=0.1, scale_x=0.4, on_click=profile_restore)
 world_button = Button(parent=restore_confirmation, text='World Data', y=0, x=0.35, color=color.red, scale_y=0.1, scale_x=0.4, on_click=world_restore)
