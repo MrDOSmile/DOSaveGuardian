@@ -19,7 +19,7 @@ restore_profile = None
 # Defining the base directory for the files.
 base = find_game_directory_base_url()
 ensure_directories_exist(base)
-default_slots = int(check_number_of_save_slots(base)[0])  # Variable to store the chosen slot as an integer
+slots = 1  # Variable to store the chosen slot as an integer
 
 def update_action_log(action):
     # Add the new action at the start of the list
@@ -95,7 +95,7 @@ dropdown = DropdownMenu('Select character save slot', buttons=[
     DropdownMenuButton(f'Character Slot: {i+1}', on_click=Func(select_slot, i), color=color.dark_gray) for i in check_number_of_save_slots(base)
 ], parent=main_menu, scale=(0.4,0.04), color=color.dark_gray)
 dropdown.position = (-0.2, 0.4)
-slot_text = Text(text=f'Selected Character Slot: {default_slots+1}', position=(0, 0.45), origin=(0, 0), color=color.white, scale=(1.2), parent=main_menu)
+slot_text = Text(text=f'Selected Character Slot: {slots}', position=(0, 0.45), origin=(0, 0), color=color.white, scale=(1.2), parent=main_menu)
 backup_button = Button(text='Full Backup', color=color.azure, y=0.1, scale_y=0.1, on_click=backup, parent=main_menu)
 restore_button = Button(text='Restore from Backup', color=color.blue, y=0, scale_y=0.1, on_click=swap_menus, parent=main_menu)
 load_button = Button(text='Load World Save', color=color.orange, y=-0.15, scale_y=0.1, on_click=load, parent=main_menu)
