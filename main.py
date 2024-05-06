@@ -59,6 +59,7 @@ def select_slot(value):
 
 # Confirmation for restoring profile
 def world_restore():
+    global slots
     worked = restore_world_from_backup(base, slots)
     swap_menus()
     if worked:
@@ -67,6 +68,7 @@ def world_restore():
         update_action_log('No backup exists for current save slot')
 
 def profile_restore():
+    global slots
     worked = restore_profile_from_backup(base)
     swap_menus()
     if worked:
@@ -75,6 +77,7 @@ def profile_restore():
         update_action_log('No backup exists for current save slot')
 
 def both_restore():
+    global slots
     worked = restore_profile_and_world(base, slots)
     swap_menus()
     if worked:
