@@ -4,6 +4,6 @@ echo Running setup script...
 call setup.bat
 
 echo Running Python script...
-start /B python main.py
+start /B run.vbs
 
 :end
