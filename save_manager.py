@@ -153,7 +153,7 @@ def load_save(base_url, slot_number):
     is_backup_dir = os.path.abspath(chosen_dir).startswith(os.path.abspath(backups_dir))
 
     # Determine the correct filename to process
-    specific_save_file = f"save_{slot_number - 1}.sav"
+    specific_save_file = f"save_{slot_number}.sav"
 
     if is_backup_dir:
         # If the chosen directory is a backup directory, only handle the specific save file
@@ -195,6 +195,6 @@ def create_save(base_url, slot_number):
         return(None)
     new_folder_path = os.path.join(target_directory, new_folder_name)
     os.makedirs(new_folder_path, exist_ok=True)
-    specific_save_file = f"save_{slot_number - 1}.sav"
+    specific_save_file = f"save_{slot_number}.sav"
     shutil.copy(os.path.join(base_url, specific_save_file), os.path.join(new_folder_path, specific_save_file))
     return(new_folder_name)
