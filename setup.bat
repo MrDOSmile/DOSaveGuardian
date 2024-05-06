@@ -10,7 +10,7 @@ if %errorlevel% neq 0 (
     echo Attempting to download and install Git...
     powershell -command "try { Invoke-WebRequest 'https://github.com/git-for-windows/git/releases/download/v2.45.0.windows.1/Git-2.45.0-64-bit.exe' -OutFile '%temp%\GitInstaller.exe'; Start-Process '%temp%\GitInstaller.exe' -ArgumentList '/VERYSILENT /NORESTART' -Wait; Remove-Item '%temp%\GitInstaller.exe' -Force; } catch { echo 'Failed to download or install Git. Please check your internet connection and try again.'; ; exit }"
     echo Git has been installed successfully.
-    echo Please relaunch the setup script to complete the setup process.
+    echo Please relaunch the script to complete.
     pause
     exit
 )
