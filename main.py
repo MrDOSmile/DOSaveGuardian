@@ -154,7 +154,7 @@ cancel_button.tooltip = Tooltip("Used if you don't want to restore anything, and
 
 
 create_save_menu = Entity(enabled=False, scale=(5,5,5))
-enter_save_name_text = Text(text=f'Enter the name of your new save', position=(0, 0.15), origin=(0, 0), color=color.white, scale=(2), parent=create_save_menu)
+enter_save_name_text = Text(text=f'Click the text box\nEnter the name of your new save\nPress enter then choose folder to save it there', position=(0, 0.15), origin=(0, 0), color=color.white, scale=(2), parent=create_save_menu)
 input_field = InputField(text="Test",
                          placeholder="Name your save here. Make sure it's something you can find later.",
                          max_lines=1,
