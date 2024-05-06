@@ -116,9 +116,9 @@ def restore_profile_from_backup(base_url):
     except:
         return(False)
 
-def restore_profile_and_world(base_url):
+def restore_profile_and_world(base_url, slots):
     prestored = restore_profile_from_backup(base_url)
-    wrestored = restore_world_from_backup(base_url)
+    wrestored = restore_world_from_backup(base_url, slots)
     restored = prestored and wrestored # Boolean check to make sure both came back True
     return(restored)
 

@@ -75,7 +75,7 @@ def profile_restore():
         update_action_log('No backup exists for current save slot')
 
 def both_restore():
-    worked = restore_profile_and_world(base)
+    worked = restore_profile_and_world(base, slots)
     swap_menus()
     if worked:
         update_action_log('Profile and World data restored')
