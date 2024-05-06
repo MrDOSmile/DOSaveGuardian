@@ -36,7 +36,7 @@ def find_game_directory_base_url():
 
 def hide_username_in_path(path):
     username = getpass.getuser()
-    return path.replace(f"C:\\Users\\{username}", "C:\\Users\\<Username>")
+    return path.replace(f"C:\\Users\\{username}", "C:\\Users\\USERNAME")
 
 def manage_backup_subdirs(backup_base_dir):
     """Manage and cycle backup subdirectories under the main backup directory."""
@@ -75,7 +75,7 @@ def full_backup_files(base_url):
     for file in files_to_backup:
         shutil.copy(os.path.join(base_url, file), os.path.join(current_backup_dir, file))
 
-def restore_from_backup(base_url, slot_number, restore_profile=False):
+def restore_world_from_backup(base_url, slot_number):
     if base_url is None:
         return
     backup_base_dir = os.path.join(base_url, "Backups")
@@ -88,6 +88,26 @@ def restore_from_backup(base_url, slot_number, restore_profile=False):
         return(True)
     except:
         return(False)
+
+def restore_profile_from_backup(base_url):
+    if base_url is None:
+        return
+    backup_base_dir = os.path.join(base_url, "Backups")
+    if not os.path.exists(backup_base_dir):
+        return
+    latest_backup_dir = os.path.join(backup_base_dir, "full_backup_10")
+    try:
+        file_to_restore = f"profile.sav"
+        shutil.copy(os.path.join(latest_backup_dir, file_to_restore), base_url)
+        return(True)
+    except:
+        return(False)
+
+def restore_profile_and_world(base_url):
+    prestored = restore_profile_from_backup(base_url)
+    wrestored = restore_world_from_backup(base_url)
+    restored = prestored and wrestored # Boolean check to make sure both came back True
+    return(restored)
 
 def load_save(base_url, slot_number):
     """Select a directory, clear 'TempSaves', and handle files based on whether the directory is a backup directory or not.

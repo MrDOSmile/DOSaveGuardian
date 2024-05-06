@@ -1,5 +1,6 @@
 from ursina import *
 from ursina.prefabs.dropdown_menu import DropdownMenu, DropdownMenuButton
+from ursina.prefabs.tooltip import Tooltip
 from save_manager import *
 
 app = Ursina()
@@ -55,28 +56,30 @@ def create():
 def select_slot(value):
     global slots
     slots = value
-    slot_text.text = f'Selected Slot: {value}'
+    slot_text.text = f'Selected Character Slot: {value}'
 
 # Confirmation for restoring profile
-def profile_restore():
-    global restore_profile
-    restore_profile = True
-    print(f'Restore profile: {restore_profile}')
-    worked = restore_from_backup(base, slots, restore_profile)
+def world_restore():
+    worked = restore_world_from_backup(base, slots)
     swap_menus()
     if worked:
-        update_action_log('Restored world and profile data')
+        update_action_log('World data restored')
     else:
         update_action_log('No backup exists for current save slot')
 
-def no_profile_restore():
-    global restore_profile
-    restore_profile = False
-    print(f'Restore profile: {restore_profile}')
-    worked = restore_from_backup(base, slots, restore_profile)
+def profile_restore():
+    worked = restore_profile_from_backup(base)
     swap_menus()
     if worked:
-        update_action_log('Restored just world data')
+        update_action_log('Profile data restored')
+    else:
+        update_action_log('No backup exists for current save slot')
+
+def both_restore():
+    worked = restore_profile_and_world(base)
+    swap_menus()
+    if worked:
+        update_action_log('Profile and World data restored')
     else:
         update_action_log('No backup exists for current save slot')
 
@@ -89,22 +92,35 @@ def swap_menus():
     main_menu.enabled = not main_menu.enabled
 
 main_menu = Entity(enabled=True, scale=(7,7,7))
-dropdown = DropdownMenu('Select Slot', buttons=[
-    DropdownMenuButton(f'Slot {i}', on_click=Func(select_slot, i), color=color.dark_gray) for i in range(1, 6)
+dropdown = DropdownMenu('Select character save slot', buttons=[
+    DropdownMenuButton(f'Character Slot: {i}', on_click=Func(select_slot, i), color=color.dark_gray) for i in range(1, 6)
 ], parent=main_menu, scale=(0.4,0.04), color=color.dark_gray)
-dropdown.position = (-0.15, 0.4)
-slot_text = Text(text='Selected Slot: 1', position=(0, 0.45), origin=(0, 0), color=color.white, scale=(1.2), parent=main_menu)
+dropdown.position = (-0.2, 0.4)
+slot_text = Text(text='Selected Character Slot: 1', position=(0, 0.45), origin=(0, 0), color=color.white, scale=(1.2), parent=main_menu)
 backup_button = Button(text='Full Backup', color=color.azure, y=0.1, scale_y=0.1, on_click=backup, parent=main_menu)
 restore_button = Button(text='Restore from Backup', color=color.blue, y=0, scale_y=0.1, on_click=swap_menus, parent=main_menu)
-load_button = Button(text='Load Save', color=color.orange, y=-0.15, scale_y=0.1, on_click=load, parent=main_menu)
+load_button = Button(text='Load World Save', color=color.orange, y=-0.15, scale_y=0.1, on_click=load, parent=main_menu)
 create_button = Button(text='Create New Save', color=color.green, y=-0.25, scale_y=0.1, on_click=create, parent=main_menu)
 actions_text = Text(text='', position=(0, -0.4), origin=(0, 0), color=color.white, parent=main_menu)
 
+# Defining tooltips for main menu buttons
+backup_button.tooltip = Tooltip(f"Will copy all files from '{hide_username_in_path(find_game_directory_base_url())}' to the 'Backups' folder there. You can have a maximum of 10 backups. The newest save is the highest number always. Character slot selection is irrelevant here, as it backs up all of the data.")
+restore_button.tooltip = Tooltip(f"---ONLY USE ON MAIN MENU OF GAME!!---\n\nWill restore the latest backup [highest numbered], using your selected character's save slot. It only restores that character's data. If you need to load an earlier save, use 'Load Save', and navigate to your 'Backups' folder, and load a lower number. If you need to load an earlier 'Profile' save, at the moment, it must be done manually.")
+load_button.tooltip = Tooltip("---ONLY USE ON MAIN MENU OF GAME!!---\n\nOpens up a window to have you select a folder [defaults to the folder called 'Saves']. Regardless of which character you created the save with, this will change that world data into one your currently selected character can use.\n\n[Quick tip: You can use the search bar in the window to find a save you want quickly!]")
+create_button.tooltip = Tooltip("Opens up a window where you select a folder. Once it's selected, you will be prompted for the name of what you want to call the save. A new folder will be created under that name. This will save your current profile and world data.")
+
 # Restore confirmation popup
 restore_confirmation = Entity(enabled=False, scale=(7,7,7))
-confirmation_text = Text(text="Would you like to restore your profile as well?", position=(0,0.1), origin=(0,0), color=color.white, parent=restore_confirmation, scale=1.2)
-yes_button = Button(parent=restore_confirmation, text='Yes', y=0, x=-0.1, color=color.lime, scale_y=0.1, scale_x=0.2, on_click=profile_restore)
-no_button = Button(parent=restore_confirmation, text='No', y=0, x=0.1, color=color.red, scale_y=0.1, scale_x=0.2, on_click=no_profile_restore)
-cancel_button = Button(parent=restore_confirmation, text='Cancel', y=-0.1, x=0, color=color.orange, scale_y=0.1, scale_x=0.4, on_click=cancel_restore)
+confirmation_text = Text(text="Please choose an option to restore that type of data:", position=(0,0.1), origin=(0,0), color=color.white, parent=restore_confirmation, scale=1.2)
+profile_button = Button(parent=restore_confirmation, text='Profile Data', y=0, x=-0.35, color=color.violet, scale_y=0.1, scale_x=0.4, on_click=profile_restore)
+world_button = Button(parent=restore_confirmation, text='World Data', y=0, x=0.35, color=color.red, scale_y=0.1, scale_x=0.4, on_click=world_restore)
+both_button = Button(parent=restore_confirmation, text='Both', y=0, x=0, color=color.lime, scale_y=0.1, scale_x=0.2, on_click=both_restore)
+cancel_button = Button(parent=restore_confirmation, text='Cancel', y=-0.15, x=0, color=color.orange, scale_y=0.1, scale_x=0.4, on_click=cancel_restore)
+
+# Defining tooltips for profile restore menu
+profile_button.tooltip = Tooltip("Profile data contains the data associated to your character and not your world. Things like your inventory, unlocks, builds, etc. and whether or not your HardCore character is still alive.\n\n[NOTE: If your hardcore character has died, use this option. The game MUST be restarted in order for your character to be alive again.]")
+world_button.tooltip = Tooltip("World data contains the data of your world progress. It will save your shop inventories, current world progression, last checkpoint, etc. This is the most common option when loading a backup.")
+both_button.tooltip = Tooltip("This loads both your Profile data and your World data at the same time from your 'Backups'. Niche use case, but the option is there.")
+cancel_button.tooltip = Tooltip("Used if you don't want to restore anything, and want to return to the main menu.")
 
 app.run()
