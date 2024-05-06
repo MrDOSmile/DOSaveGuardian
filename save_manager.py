@@ -96,7 +96,7 @@ def restore_world_from_backup(base_url, slot_number):
         return
     latest_backup_dir = os.path.join(backup_base_dir, "full_backup_10")
     try:
-        file_to_restore = f"save_{slot_number - 1}.sav"
+        file_to_restore = f"save_{slot_number}.sav"
         shutil.copy(os.path.join(latest_backup_dir, file_to_restore), base_url)
         return(True)
     except:
