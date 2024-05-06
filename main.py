@@ -62,7 +62,7 @@ def world_restore():
     worked = restore_world_from_backup(base, slots)
     swap_menus()
     if worked:
-        update_action_log('World data restored')
+        update_action_log(f'World data restored for slot {slots+1}')
     else:
         update_action_log('No backup exists for current save slot')
 
@@ -70,7 +70,7 @@ def profile_restore():
     worked = restore_profile_from_backup(base)
     swap_menus()
     if worked:
-        update_action_log('Profile data restored')
+        update_action_log(f'Profile data restored for slot {slots+1}')
     else:
         update_action_log('No backup exists for current save slot')
 
@@ -78,7 +78,7 @@ def both_restore():
     worked = restore_profile_and_world(base, slots)
     swap_menus()
     if worked:
-        update_action_log('Profile and World data restored')
+        update_action_log(f'Profile and World data restored for slot {slots+1}')
     else:
         update_action_log('No backup exists for current save slot')
 
