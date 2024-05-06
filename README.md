@@ -17,11 +17,12 @@ The Game Save Manager is a Python-based graphical utility for Windows, designed 
 
 1. **Prerequisites**:
    - Python 3.12.3 or higher. Install from [Python's official site](https://www.python.org/downloads/). Ensure to add Python to the 'PATH' during installation.
+   - Git installed on your system to manage updates and version control. Download and install Git from [Git SCM](https://git-scm.com/downloads).
    - Administrative privileges on Windows for file management.
 
 2. **Setup**:
-   - Download or clone this repository to your computer.
-   - Navigate to the project directory and run the `launch.bat` file. This script automatically installs necessary Python modules and starts the utility.
+   - Download or clone this repository to your computer. If Git is not already installed, follow the link above to download and install it.
+   - Navigate to the project directory and run the `launch.bat` file. This script checks for necessary Python modules, pulls the latest updates from the repository, and starts the utility.
 
 ## Usage
 
@@ -34,7 +35,7 @@ The Game Save Manager is a Python-based graphical utility for Windows, designed 
 ## Troubleshooting
 
 - Ensure that "Remnant2" is properly installed and that the game directories are accessible.
-- Verify correct Python installation and necessary permissions.
+- Verify correct Python and Git installations and necessary permissions.
 - Some bugs may exist; if you encounter issues, feel free to leave a comment on the GitHub repository for assistance or to report the bug.
 
 ## Conclusion
