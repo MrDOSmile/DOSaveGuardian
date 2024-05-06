@@ -60,6 +60,9 @@ def create(key):
             else:
                 update_action_log("Cancelled choosing a target location")
 
+def cancel_create():
+    update_action_log("Cancelled creating a new save")
+    swap_main_menu()
 
 def call_create_save(new_save_name, slots):
     worked = create_save(new_save_name, slots)
@@ -154,7 +157,8 @@ cancel_button.tooltip = Tooltip("Used if you don't want to restore anything, and
 
 
 create_save_menu = Entity(enabled=False, scale=(5,5,5))
-enter_save_name_text = Text(text=f'Click the text box\nEnter the name of your new save\nPress enter then choose folder to save it there', position=(0, 0.15), origin=(0, 0), color=color.white, scale=(2), parent=create_save_menu)
+enter_save_name_text = Text(text=f'Click the text box\nEnter the name of your new save\nPress enter to submit\nChoose folder to save it there', position=(0, 0.15), origin=(0, 0), color=color.white, scale=(2), parent=create_save_menu)
+cancel_button_input_field = Button(parent=create_save_menu, text='Cancel', y=-0.3, x=0, color=color.orange, scale_y=0.1, scale_x=0.4, on_click=cancel_create)
 input_field = InputField(text="Test",
                          placeholder="Name your save here. Make sure it's something you can find later.",
                          max_lines=1,
