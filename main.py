@@ -56,6 +56,7 @@ def select_slot(value):
     global slots
     slots = value
     slot_text.text = f'Selected Character Slot: {value+1}'
+    slot_text_data.text = f'Selected Character Slot: {value+1}'
 
 # Confirmation for restoring profile
 def world_restore():
