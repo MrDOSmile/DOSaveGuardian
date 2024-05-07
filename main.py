@@ -125,7 +125,7 @@ def swap_create_save():
     create_save_menu.enabled = True
 
 main_menu = Entity(enabled=True, scale=(7,7,7))
-dropdown = DropdownMenu('Select character save slot', buttons=[
+dropdown = DropdownMenu('   Select character slot', buttons=[
     DropdownMenuButton(f'Character Slot: {i+1}', on_click=Func(select_slot, i), color=color.dark_gray) for i in check_number_of_save_slots(base)
 ], parent=main_menu, scale=(0.4,0.04), color=color.dark_gray)
 dropdown.position = (-0.2, 0.4)
