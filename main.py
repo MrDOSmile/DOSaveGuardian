@@ -49,6 +49,7 @@ def create(key):
         global new_save_name
         global slots
         new_save_name = input_field.text
+        input_field.text = ""
         if len(new_save_name) == 0:
             swap_main_menu()
             update_action_log("No name was entered")
